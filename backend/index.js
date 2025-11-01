@@ -1,23 +1,29 @@
 const express = require("express");
 const { connectDB } = require("./db/config");
 const cors = require("cors");
-
 const userRouter = require("./routes/userRoute");
 
 const app = express();
 
-
-
+// ✅ Connect to MongoDB
 connectDB();
 
+// ✅ Middleware
 app.use(express.json());
-app.use(cors());
-app.use("/api/users",userRouter);
 
+// ✅ Correct CORS setup
+app.use(
+  cors({
+    origin: "http://localhost:3000", // React app URL
+    credentials: true, // allow cookies, tokens, etc.
+  })
+);
 
+// ✅ Routes
+app.use("/api/auth", userRouter);
 
-app.listen(4000,()=>{
-
-    console.log("Server is listening to the port 4000");
-
+// ✅ Start server
+const PORT = 4000;
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
